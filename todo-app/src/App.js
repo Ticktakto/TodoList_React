@@ -1,25 +1,10 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+import react from 'react';
+import TodoTemplate from './components/TodoTemplate'
+const App = () => {
+  return(
+    <TodoTemplate>toDo App를 만들자!</TodoTemplate>
   );
 }
 
 export default App;
+// Component들은 반드시 이름 앞이 대문자!
