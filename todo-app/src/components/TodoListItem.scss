@@ -28,11 +28,14 @@
         // 체크 됬을 경우 보여 줄 스타일
         &.checked {
             svg {
+                // 체크박스 색깔
                 color: #22b8cf;
             }
 
             .text {
+                // 글자 색
                 color: #adb5bd;
+                // 텍스트 중간에 줄 긋기
                 text-decoration: line-through;
             }
         }
