@@ -8,12 +8,12 @@ import cn from 'classnames';
 import './TodoListItem.scss'; 
 
 // MdCheckBox -> (체크된) 체크박스, MdCheckBoxOutlineBlank -> (빈) 체크박스
-const TodoListItem = ({ todo, onRemove }) => {
+const TodoListItem = ({ todo, onRemove, onToggle }) => {
     const { id, text, checked } = todo;
 
     return(
         <div className="TodoListItem">
-            <div className={cn("checkbox", { checked })}>
+            <div className={cn("checkbox", { checked })} onClick={() => onToggle(id)}>
                 {checked ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}
                 <div className="text">{text}</div>
             </div>
