@@ -8,8 +8,8 @@ import cn from 'classnames';
 import './TodoListItem.scss'; 
 
 // MdCheckBox -> (체크된) 체크박스, MdCheckBoxOutlineBlank -> (빈) 체크박스
-const TodoListItem = ({ todo }) => {
-    const { text, checked } = todo;
+const TodoListItem = ({ todo, onRemove }) => {
+    const { id, text, checked } = todo;
 
     return(
         <div className="TodoListItem">
@@ -17,7 +17,7 @@ const TodoListItem = ({ todo }) => {
                 {checked ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}
                 <div className="text">{text}</div>
             </div>
-            <div className="remove">
+            <div className="remove" onClick={() => onRemove(id)}>
                 <MdRemoveCircleOutline />
             </div>
         </div>
