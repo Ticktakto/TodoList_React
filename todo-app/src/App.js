@@ -3,27 +3,25 @@ import TodoTemplate from './components/TodoTemplate'
 import TodoInsert from './components/TodoInsert';
 import TodoList from './components/TodoList';
 
-const App = () => {
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      text: '리액트의 기초 알아보기',
-      checked: true,
-    },
-    {
-      id: 2,
-      text: '컴포넌트 스타일링 해 보기',
-      checked: true,
-    },
-    {
-      id: 3,
-      text: '일정 관리 앱 만들어 보기',
+function createBulkTodos() {
+  const array = [];
+  for(let i = 0; i < 2500; i++) {
+    array.push({
+      id : i,
+      text: `할 일 ${i}`,
       checked: false,
-    },
-  ]);
+    })
+  }
+  return array;
+}
+
+const App = () => {
+  const [todos, setTodos] = useState(
+    createBulkTodos
+  );
 
   // primary key => id, ref 사용해 변수 담기
-  const nextId = useRef(4); // 다음 id -> 4
+  const nextId = useRef(2501); // 다음 id -> 4
 
   // Insert 기능 구현
   const onInsert = useCallback(
@@ -33,7 +31,7 @@ const App = () => {
         text,
         checked: false,
       };
-      setTodos(todos.concat(todo));
+      setTodos(todos => todos.concat(todo));
       nextId.current += 1;
     }, [todos],
   )
@@ -41,15 +39,17 @@ const App = () => {
   // Remove 기능 구현
   const onRemove = useCallback( 
     id => { 
-        setTodos(todos.filter(todo => todo.id !== id));
+        setTodos(todos => todos.filter(todo => todo.id !== id));
     }, [todos],
     );
 
   // 수정 기능 구현
   const onToggle = useCallback(
     id => {
-      setTodos(
+      setTodos( todos =>
         todos.map(todo => 
+          // map -> 해당 배열을 전체적으로 변형하여 새로운 배열을 만드는 내장 함수
+          // 각 원소(todo)의 해당 id에 도달한 경우 -> checked를 뒤집고 붙이기, 해당 id가 아니면 -> todo 그대로 붙이면서
           todo.id === id ? {...todo, checked: !todo.checked } : todo,
         ),
       );
