@@ -1,4 +1,4 @@
-import react, { useState, useRef, useCallback }from 'react';
+import react, { useReducer, useState, useRef, useCallback }from 'react';
 import TodoTemplate from './components/TodoTemplate'
 import TodoInsert from './components/TodoInsert';
 import TodoList from './components/TodoList';
@@ -15,10 +15,27 @@ function createBulkTodos() {
   return array;
 }
 
+function todoReducer(todos, action) {
+  switch(action.type){
+    case 'INSERT' : // 새로 추가
+    // {type : 'INSERT', todo: {id: 1, text: 'todo', checked: false }}
+    return todos.concat(action.todo);
+
+    case 'REMOVE' :
+      return todos.filter(todo => todo.id !== action.id);
+    
+    case 'TOGGLE' :
+      return todos.map(todo => 
+        todo.id === action.id ? {...todo, checked: !todo.checked } : todo, );
+    
+    default:
+      return todos; 
+  }
+}
+
+
 const App = () => {
-  const [todos, setTodos] = useState(
-    createBulkTodos
-  );
+  const [todos, dispatch] = useReducer(todoReducer, undefined, createBulkTodos);
 
   // primary key => id, ref 사용해 변수 담기
   const nextId = useRef(2501); // 다음 id -> 4
@@ -31,29 +48,23 @@ const App = () => {
         text,
         checked: false,
       };
-      setTodos(todos => todos.concat(todo));
+      dispatch({type : 'INSERT', todo});
       nextId.current += 1;
-    }, [todos],
+    }, [],
   )
   
   // Remove 기능 구현
   const onRemove = useCallback( 
     id => { 
-        setTodos(todos => todos.filter(todo => todo.id !== id));
-    }, [todos],
+      dispatch({ type : 'REMOVE', id });
+    }, [],
     );
 
   // 수정 기능 구현
   const onToggle = useCallback(
     id => {
-      setTodos( todos =>
-        todos.map(todo => 
-          // map -> 해당 배열을 전체적으로 변형하여 새로운 배열을 만드는 내장 함수
-          // 각 원소(todo)의 해당 id에 도달한 경우 -> checked를 뒤집고 붙이기, 해당 id가 아니면 -> todo 그대로 붙이면서
-          todo.id === id ? {...todo, checked: !todo.checked } : todo,
-        ),
-      );
-    }, [todos],
+      dispatch({ type: 'TOGGLE', id});
+    }, [],
   );
 
   return(
