@@ -8,11 +8,12 @@ import cn from 'classnames';
 import './TodoListItem.scss'; 
 
 // MdCheckBox -> (체크된) 체크박스, MdCheckBoxOutlineBlank -> (빈) 체크박스
-const TodoListItem = ({ todo, onRemove, onToggle }) => {
+const TodoListItem = ({ todo, onRemove, onToggle, style }) => {
     const { id, text, checked } = todo;
 
     return(
-        <div className="TodoListItem">
+        <div className="TodoListItem-virtualized" style={style}>
+            <div className="TodoListItem">
             <div className={cn("checkbox", { checked })} onClick={() => onToggle(id)}>
                 {checked ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}
                 <div className="text">{text}</div>
@@ -21,7 +22,11 @@ const TodoListItem = ({ todo, onRemove, onToggle }) => {
                 <MdRemoveCircleOutline />
             </div>
         </div>
+        </div>
     );
 };
 
-export default React.memo(TodoListItem);
+export default React.memo(
+    TodoListItem,
+    (prevProps, nextProps) => prevProps.todo === nextProps.todo,
+    );
